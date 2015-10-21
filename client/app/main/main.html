@@ -1,17 +1,29 @@
 
-  <section layout="row" flex>
-    <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="1 == 1">
+  <section layout="row" style="height: 100%" flex>
+    <md-sidenav class="md-sidenav-left md-whiteframe-z2" style="height: 100%; " md-component-id="left" md-is-locked-open="1 == 1">
       <md-toolbar class="md-theme-indigo">
-        <h1 class="md-toolbar-tools">Sidenav Left</h1>
+        <h1 class="md-toolbar-tools">Energy Project</h1>
       </md-toolbar>
-      <md-content layout-padding>
-        <md-button ng-click="close()" class="md-primary" hide-gt-md>
-          Close Sidenav Left
-        </md-button>
-        <p hide-md show-gt-md>
-          This sidenav is locked open on your device. To go back to the default behavior,
-          narrow your display.
-        </p>
+      <md-content>
+        <section layout="row">
+            <md-button ng-click="generator(100)" class="md-raised md-warn" flex="grow">
+              Generate Data
+            </md-button>
+        </section>
       </md-content>
     </md-sidenav>
+    <md-content flex>
+      <md-list>
+        <md-subheader class="md-no-sticky">Solar Data</md-subheader>
+        <md-list-item class="md-3-line" ng-repeat="data in solarData">
+          <div class="md-list-item-text" layout="column">
+            <h3>{{ data.metric }}</h3>
+            <h4>{{ data.value }}</h4>
+            <p>{{ data.tags }}</p>
+          </div>
+        </md-list-item>
+      </md-list>
+      <div google-chart chart="chartObject" style="height:600px; width:100%;"></div>
+
+    </md-content>
   </section>
