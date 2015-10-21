@@ -35,18 +35,26 @@ angular.module('energyProjectApp')
          * Syncs item creation/updates on 'model:save'
          */
         socket.on(modelName + ':save', function (item) {
-          var oldItem = _.find(array, {_id: item._id});
-          var index = array.indexOf(oldItem);
           var event = 'created';
 
           // replace oldItem if it exists
-          // otherwise just add item to the collection
-          if (oldItem) {
-            array.splice(index, 1, item);
-            event = 'updated';
-          } else {
-            array.push(item);
-          }
+          // otherwise just add item to the collectio
+          console.log({
+              c: [
+                {v: new Date(item.timestamp)},
+                {v: item.value},
+                {v: item.tags.unit},
+                {v: item.tags.dorm}
+              ]
+            })
+          array.push({
+              c: [
+                {v: new Date(item.timestamp)},
+                {v: item.value},
+                {v: item.tags.unit},
+                {v: item.tags.dorm}
+              ]
+            });
 
           cb(event, item, array);
         });

@@ -9,9 +9,23 @@ angular.module('energyProjectApp')
       socket.syncUpdates('thing', $scope.awesomeThings);
     });
 
-    $scope.solarData = [{metric: 'Hello my name is bob', value: 100, tags: {}}, {metric: 'Hello', value: 100, tags: {}}];
+    $scope.solarData = [];
 
-    socket.syncUpdates('SolarData', $scope.solarData);
+    $http.get('/api/SolarData').success(function(success) {
+      console.log(success);
+      for(var i = 0; i < success.payload.length; i++) {
+        console.log(success.payload[i].value)
+        $scope.solarData.push({
+          c: [
+            {v: new Date(success.payload[i].timestamp)},
+            {v: success.payload[i].value},
+            {v: success.payload[i].tags.unit},
+            {v: success.payload[i].tags.dorm}
+          ]
+        })
+      }
+      socket.syncUpdates('SolarData', $scope.solarData);
+    })
 
     $scope.chartObject = {};
 
@@ -29,35 +43,11 @@ angular.module('energyProjectApp')
         $scope.chartObject.type = "AnnotationChart";
 
         $scope.chartObject.data = {"cols": [
-            {id: "month", label: "Month", type: "date"},
+            {id: "month", label: "Seconds", type: "date"},
             {id: "kepler-data", label: "Kepler-22b mission", type: "number"},
             {id: "kepler-annot", label: "Kepler-22b Annotation Title", type: "string"},
             {id: "kepler-annot-body", label: "Kepler-22b Annotation Text", type: "string"},
-            {id: "desktop-data", label: "Gliese mission", type: "number"},
-            {id: "desktop-annot", label: "Gliese Annotation Title", type: "string"},
-            {id: "desktop-annot-body", label: "Gliese Annotaioon Text", type: "string"}
-        ], "rows": [
-            {c: [
-                {v: new Date(2314, 2, 15)},
-                {v: 19 },
-                {v: 'Lalibertines'},
-                {v: 'First encounter'},
-                {v: 7},
-                {v: undefined},
-                {v: undefined}
-            ]},
-            {c: $scope.secondRow},
-            {c: [
-                {v: new Date(2314, 2, 17)},
-                {v: 0},
-                {v: 'Lalibertines'},
-                {v: 'All crew lost'},
-                {v: 28},
-                {v: 'Gallantors'},
-                {v: 'Omniscience achieved'}
-
-            ]}
-        ]};
+        ], "rows": $scope.solarData};
 
         $scope.chartObject.options = {
             displayAnnotations: true
@@ -79,22 +69,25 @@ angular.module('energyProjectApp')
       socket.unsyncUpdates('thing');
     });
     
-    function generator(num){
-      var object = {
-        "metric" : "power",
-        "timestamp" : null,
-        "value" : null,
-        "tags" : {
-          "unit" : "volts",
-          "dorm" : "spooner",
-          "floor" : 2,
-          "room" : 200
-        }
-      };
-      
+    $scope.generator = function(num) {
       for (var i = 0; i < num; i++){
+        var object = {
+          "metric" : "power",
+          "timestamp" : null,
+          "value" : null,
+          "tags" : {
+            "unit" : "volts",
+            "dorm" : "spooner",
+            "floor" : 2,
+            "room" : 200
+          }
+        };
         object.timestamp = new Date();
-        object.value = int(Math.random() * 10);
+        object.value = Math.floor(Math.random() * 100);
+        console.log(object.value)
+        $http.post('/api/SolarData', object).success(function(success) {
+          console.log(success)
+        })
       }
     }
     

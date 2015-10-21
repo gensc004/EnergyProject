@@ -7,13 +7,16 @@
       <md-content>
         <section layout="row">
             <md-button ng-click="generator(100)" class="md-raised md-warn" flex="grow">
-              Generate Data
+              Generate 100
+            </md-button>
+            <md-button ng-click="generator(1)" class="md-raised md-warn" flex="grow">
+              Generate 1
             </md-button>
         </section>
       </md-content>
     </md-sidenav>
-    <md-content flex>
-      <md-list>
+    <md-content flex style="height: 100%; width: 100%">
+      <!-- <md-list>
         <md-subheader class="md-no-sticky">Solar Data</md-subheader>
         <md-list-item class="md-3-line" ng-repeat="data in solarData">
           <div class="md-list-item-text" layout="column">
@@ -22,8 +25,8 @@
             <p>{{ data.tags }}</p>
           </div>
         </md-list-item>
-      </md-list>
-      <div google-chart chart="chartObject" style="height:600px; width:100%;"></div>
+      </md-list> -->
+      <div google-chart chart="chartObject" style="height:100%; width:100%;"></div>
 
     </md-content>
   </section>
