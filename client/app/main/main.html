@@ -9,7 +9,7 @@
             <md-button ng-click="generator(100)" class="md-raised md-warn" flex="grow">
               Generate 100
             </md-button>
-            <md-button ng-click="generator(1)" class="md-raised md-warn" flex="grow">
+            <md-button ng-click="putData()" class="md-raised md-warn" flex="grow">
               Generate 1
             </md-button>
         </section>
@@ -27,6 +27,7 @@
         </md-list-item>
       </md-list> -->
       <div google-chart chart="chartObject" style="height:100%; width:100%;"></div>
+              <nvd3 options="options" data="data"></nvd3>
 
     </md-content>
   </section>

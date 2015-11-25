@@ -7,12 +7,14 @@ angular.module('energyProjectApp', [
   'btford.socket-io',
   'ui.router',
   'ngMaterial',
-  "googlechart"
+  'googlechart',
+  'nvd3'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider
       .otherwise('/');
-
+     $httpProvider.defaults.useXDomain = true;
+  delete $httpProvider.defaults.headers.common['X-Requested-With'];
     $locationProvider.html5Mode(true);
     $httpProvider.interceptors.push('authInterceptor');
   })
