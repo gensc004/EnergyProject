@@ -1,5 +1,4 @@
 'use strict';
-
 angular.module('energyProjectApp')
   .controller('MainCtrl', function ($scope, $http, socket, $q) {
     $scope.awesomeThings = [];
@@ -9,26 +8,22 @@ angular.module('energyProjectApp')
         var message = {
             metric: 'power',
             timestamp: Date.now(),
+            value: 11111,
             tags: {
                 units : 'kW/s',
                 source : 'Solar-Panels-Somewhere',
             }
-        }
+        };
 
         $http(
             {
-                method: 'post', 
-                url: "http://umm-energydev.oit.umn.edu:4242/api/put", 
-                data: message, 
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE, OPTIONS',
-                    'Access-Control-Max-Age': '1000',
-                    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With'
-        }}).success(function(success) {
+                method: 'post',
+                url: 'http://umm-energydev.oit.umn.edu:4242/api/put',
+                data: message
+        }).success(function(success) {
             console.log(success);
-        }) 
-    }
+        });
+    };
 
 
 
@@ -42,7 +37,7 @@ angular.module('energyProjectApp')
     $http.get('/api/SolarData').success(function(success) {
       console.log(success);
       for(var i = 0; i < success.payload.length; i++) {
-        console.log(success.payload[i].value)
+        console.log(success.payload[i].value);
         $scope.solarData.push({
           c: [
             {v: new Date(success.payload[i].timestamp)},
@@ -92,11 +87,11 @@ angular.module('energyProjectApp')
     $scope.deleteThing = function(thing) {
       $http.delete('/api/things/' + thing._id);
     };
-  
+
     $scope.$on('$destroy', function () {
       socket.unsyncUpdates('thing');
     });
-    
+
     $scope.generator = function(num) {
       if(num > 0) {
         var object = {
@@ -222,5 +217,5 @@ angular.module('energyProjectApp')
             ];
         };
 
-    
+
   });
