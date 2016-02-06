@@ -7,8 +7,7 @@ angular.module('energyProjectApp', [
   'btford.socket-io',
   'ui.router',
   'ngMaterial',
-  'googlechart',
-  'nvd3'
+  'googlechart'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider
