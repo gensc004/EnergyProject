@@ -1,8 +1,9 @@
 'use strict';
 angular.module('energyProjectApp')
   .controller('MainCtrl', function ($scope, $http, socket, $q) {
-    $scope.awesomeThings = [];
-    $scope.myDate = new Date();
+    $scope.startDate = new Date();
+    $scope.endDate = new Date();
+    $scope.hideSidenav = true;
     $scope.chartObject = {
         "type": "LineChart",
         "displayed": false,
@@ -38,34 +39,70 @@ angular.module('energyProjectApp')
           },
         "formatters": {}
     }
-    $scope.getData = function() {
-        console.log($scope.formatDate($scope.myDate))
 
+    $scope.downsample = '30s-avg';
+    $scope.energyType = '*';
+    $scope.energyTypes = ['GDSP1','GDSP2','GDSP3','SciSP67'];
+    $scope.searchByType = false;
+    $scope.queryProgress = 0;
+    $scope.queryTotal = 0;
+    $scope.getData = function() {
+        $scope.queryProgress = 0;
+        $scope.queryTotal = 0;
+        console.log($scope.searchByType)
+        var searchTag;
+        $scope.chartObject.data.rows = [];
+        if($scope.searchByType) {
+           searchTag = '{source=' + $scope.energyType + '}';
+        } else {
+            searchTag = '';
+        }
         $http(
             {
                 method: 'get',
-                url: 'http://umm-energydev.oit.umn.edu:4242/api/query?start=' + $scope.formatDate($scope.myDate) + '&m=avg:1w-avg:energy',
+                url: 'http://umm-energydev.oit.umn.edu:4242/api/query?start=' + $scope.formatDate($scope.startDate, '00:00:00') + '&end=' + $scope.formatDate($scope.endDate, '23:59:59') + '&m=avg:' + $scope.downsample + ':energy' + searchTag
         }).success(function(success) {
-            console.log(success[0]);
-            for(var property in success[0].dps) {
-                console.log(new Date(property * 1000))
-                $scope.chartObject.data.rows.push({
-                    "c": [
-                      {
-                        "v": (new Date(property * 1000)).toString()
-                      },
-                      {
-                        "v": success[0].dps[property],
-                      }
-                    ]
-                  })
-            }
+            var promise = count(success[0].dps);
+            promise.then(function(count) {
+                $scope.queryTotal = count;
+                console.log($scope.queryTotal)
+                for(var property in success[0].dps) {
+                    console.log(new Date(property * 1000))
+                    $scope.chartObject.data.rows.push({
+                        "c": [
+                          {
+                            "v": (new Date(property * 1000)).toString()
+                          },
+                          {
+                            "v": success[0].dps[property],
+                          }
+                        ]
+                      })
+                    $scope.queryProgress++;
+                    $scope.queryTotal = ($scope.queryProgress / 1000) * 100;
+                    console.log($scope.queryTotal)
+                }
+            })
         });
     };
 
-    $scope.formatDate = function(date) {
+    var count = function(ob) {
+        var promise = $q.defer();
+        var count = 0;
+        for(var prop in ob) {
+            count++;
+        }
+        promise.resolve(count);
+        return promise.promise;
+    }
+
+    $scope.formatDate = function(date, time) {
+        console.log(date);
         var month = ((date.getMonth() + 1) < 10)?('0' + (date.getMonth() + 1)):(date.getMonth() + 1);
-        var day = (date.getDay() < 10)?('0' + date.getDay()):date.getDay();
-        return date.getFullYear() + '/' + month + '/' + day + '-' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()
+        var day = (date.getDate() < 10)?('0' + date.getDate()):date.getDate();
+        console.log(day)
+        //return date.getFullYear() + '/' + month + '/' + day + '-' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()
+        return date.getFullYear() + '/' + month + '/' + day + '-' + time;
+
     }
   });
