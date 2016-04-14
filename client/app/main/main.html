@@ -25,9 +25,17 @@
         <md-content layout="row">
           <md-datepicker class="e-date-picker" style="background-color:white" ng-model="endDate" md-placeholder="Enter date"></md-datepicker>
         </md-content>
-        <md-input-container>
+        <!-- <md-input-container>
           <label>Downsample</label>
           <input ng-model="downsample">
+        </md-input-container> -->
+        <md-input-container>
+          <label>Downsample</label>
+          <md-select ng-model="downsample">
+            <md-option ng-repeat="ds in downsamples" selected="1" value="{{ds.query}}">
+              {{ds.name}}
+            </md-option>
+          </md-select>
         </md-input-container>
         <!-- <md-input-container>
           <label>Energy Type</label>

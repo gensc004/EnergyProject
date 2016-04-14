@@ -11,6 +11,7 @@ var mongoose = require('mongoose');
 module.exports = function(app) {
 
   // Insert routes below
+  app.use('/api/energydata', require('./api/data'));
   // app.use('/api/SolarDatas', require('./api/SolarData'));
   // app.use('/api/things', require('./api/thing'));
   // app.use('/api/users', require('./api/user'));
