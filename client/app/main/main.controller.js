@@ -12,6 +12,14 @@ angular.module('energyProjectApp')
     }
     
     $scope.hideSidenav = true;
+    $scope.downsample = 'minute';
+    $scope.energyType = '*';
+    $scope.energyTypes = ['GDSP1','GDSP2','GDSP3','SciSP67'];
+    $scope.downsamples = [{name:'Month', query: '1n-avg'}, {name:'Week', query: '1w-avg'}, {name:'Day', query: '1d-avg'}, {name:'Hour', query: '1h-avg'}, {name:'Minute', query: '1m-avg'}];
+
+    $scope.searchByType = false;
+    $scope.queryProgress = 0;
+    $scope.queryTotal = 0;
     $scope.chartObject = {
         "type": "LineChart",
         "displayed": false,
@@ -31,7 +39,7 @@ angular.module('energyProjectApp')
             "rows": []
         },
         "options": {
-        "title": "Average Energy per week",
+        "title": "Average Energy per " + $scope.downsample,
         "isStacked": "true",
         "fill": 20,
         "displayExactValues": true,
@@ -48,14 +56,7 @@ angular.module('energyProjectApp')
         "formatters": {}
     }
 
-    $scope.downsample = '30s-avg';
-    $scope.energyType = '*';
-    $scope.energyTypes = ['GDSP1','GDSP2','GDSP3','SciSP67'];
-    $scope.downsamples = [{name:'Month', query: '1n-avg'}, {name:'Week', query: '1w-avg'}, {name:'Day', query: '1d-avg'}, {name:'Hour', query: '1h-avg'}, {name:'Minute', query: '1m-avg'}];
-
-    $scope.searchByType = false;
-    $scope.queryProgress = 0;
-    $scope.queryTotal = 0;
+  
 
     $scope.getData = function() {
         $scope.queryProgress = 0;
@@ -68,7 +69,7 @@ angular.module('energyProjectApp')
             searchTag = '';
         }
 
-        var url = 'http://umm-energydev.oit.umn.edu:4242/api/query?start=' + $scope.formatDate($scope.startDate, '00:00:00') + '%26end=' + $scope.formatDate($scope.endDate, '23:59:59') + '%26m=sum:rate:' + $scope.downsample + ':pulse' + searchTag;
+        var url = 'http://umm-energydev.oit.umn.edu:4242/api/query?start=' + $scope.formatDate($scope.startDate, '00:00:00') + '%26end=' + $scope.formatDate($scope.endDate, '23:59:59') + '%26m=sum:rate:' + $scope.downsample + ':energy' + searchTag;
 
 
 
