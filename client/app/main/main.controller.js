@@ -80,51 +80,8 @@ angular.module('energyProjectApp')
         }).success(function(success) {
             console.log(success);
             $scope.chartObject.data.rows = success;
-            // var promise = count(success[0].dps);
-            // promise.then(function(count) {
-            //     $scope.queryTotal = count;
-            //     for(var property in success[0].dps) {
-            //         $scope.chartObject.data.rows.push({
-            //             "c": [
-            //               {
-            //                 "v": (new Date(property * 1000)).toString()
-            //               },
-            //               {
-            //                 "v": success[0].dps[property],
-            //               }
-            //             ]
-            //           })
-            //         $scope.queryProgress++;
-            //         $scope.queryTotal = ($scope.queryProgress / 1000) * 100;
-            //     }
-            // })
         });
 
-
-        // $http(
-        //     {
-        //         method: 'get',
-        //         url: 'http://umm-energydev.oit.umn.edu:4242/api/query?start=' + $scope.formatDate($scope.startDate, '00:00:00') + '&end=' + $scope.formatDate($scope.endDate, '23:59:59') + '&m=avg:' + $scope.downsample + ':energy' + searchTag
-        // }).success(function(success) {
-        //     var promise = count(success[0].dps);
-        //     promise.then(function(count) {
-        //         $scope.queryTotal = count;
-        //         for(var property in success[0].dps) {
-        //             $scope.chartObject.data.rows.push({
-        //                 "c": [
-        //                   {
-        //                     "v": (new Date(property * 1000)).toString()
-        //                   },
-        //                   {
-        //                     "v": success[0].dps[property],
-        //                   }
-        //                 ]
-        //               })
-        //             $scope.queryProgress++;
-        //             $scope.queryTotal = ($scope.queryProgress / 1000) * 100;
-        //         }
-        //     })
-        // });
     };
 
     var count = function(ob) {
